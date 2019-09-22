@@ -22,3 +22,5 @@ export const isAntDesignProOrDev = (): boolean => {
 };
 
 export const getPageQuery = () => parse(window.location.href.split('?')[1]);
+
+export const defaultCopyright = `${new Date().getFullYear()} 光速斑马前端技术部出品`;

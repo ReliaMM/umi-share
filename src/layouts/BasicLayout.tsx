@@ -14,7 +14,7 @@ import Link from 'umi/link';
 import { Dispatch } from 'redux';
 import { connect } from 'dva';
 import { formatMessage } from 'umi-plugin-react/locale';
-
+import { defaultCopyright } from '@/utils/utils';
 import Authorized from '@/utils/Authorized';
 import RightContent from '@/components/GlobalHeader/RightContent';
 import { ConnectState } from '@/models/connect';
@@ -31,7 +31,6 @@ export type BasicLayoutContext = { [K in 'location']: BasicLayoutProps[K] } & {
     [path: string]: MenuDataItem;
   };
 };
-const defaultCopyright = `${new Date().getFullYear()} 光速斑马前端技术部出品`;
 /**
  * use Authorized check all menu item
  */
