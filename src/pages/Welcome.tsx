@@ -21,7 +21,7 @@ export default (): React.ReactNode => (
   <PageHeaderWrapper>
     <Card>
       <Alert
-        message="umi ui 现已发布，欢迎使用 npm run ui 启动体验。"
+        message="欢迎使用 大斑马分享屋。"
         type="success"
         showIcon
         banner
@@ -31,7 +31,7 @@ export default (): React.ReactNode => (
         }}
       />
       <Typography.Text strong>
-        <a target="_blank" rel="noopener noreferrer" href="https://pro.ant.design/docs/block">
+        <a target="_blank" rel="noopener noreferrer" href="https://pro.ant.design/docs/block/block-cn">
           <FormattedMessage
             id="app.welcome.link.block-list"
             defaultMessage="基于 block 开发，快速构建标准页面"
@@ -39,28 +39,17 @@ export default (): React.ReactNode => (
         </a>
       </Typography.Text>
       <CodePreview>npx umi block list</CodePreview>
-      <Typography.Text
-        strong
-        style={{
-          marginBottom: 12,
-        }}
-      >
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://pro.ant.design/docs/available-script#npm-run-fetchblocks"
-        >
-          <FormattedMessage id="app.welcome.link.fetch-blocks" defaultMessage="获取全部区块" />
+      <Typography.Text strong>
+        <a target="_blank" rel="noopener noreferrer" href="https://pro.ant.design/docs/getting-started-cn">
+          <FormattedMessage
+            id="app.welcome.link.ant-pro-list"
+            defaultMessage="基于 Ant Design Pro 开发"
+          />
         </a>
       </Typography.Text>
-      <CodePreview> npm run fetch:blocks</CodePreview>
+      <CodePreview>yarn create umi</CodePreview>
+      <CodePreview>npm install</CodePreview>
+      <CodePreview>npm start</CodePreview>
     </Card>
-    <p style={{ textAlign: 'center', marginTop: 24 }}>
-      Want to add more pages? Please refer to{' '}
-      <a href="https://pro.ant.design/docs/block-cn" target="_blank" rel="noopener noreferrer">
-        use block
-      </a>
-      。
-    </p>
   </PageHeaderWrapper>
 );

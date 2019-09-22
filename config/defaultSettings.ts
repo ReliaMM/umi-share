@@ -44,7 +44,7 @@ export interface DefaultSettings {
 
 export default {
   navTheme: 'light',
-  primaryColor: '#13C2C2',
+  primaryColor: '#ff8e1d',
   layout: 'topmenu',
   contentWidth: 'Fixed',
   fixedHeader: true,
@@ -54,7 +54,7 @@ export default {
   menu: {
     locale: true,
   },
-  title: '光速斑马分享',
+  title: '大斑马的分享屋',
   pwa: false,
   collapse: true,
   iconfontUrl: '',
