@@ -1,20 +1,19 @@
-import { Card, Col, Form, List, Row, Select, Typography } from 'antd';
+import { Card, Col, Form, List, Row, Typography, Input, Tag } from 'antd';
 import React, { Component } from 'react';
 
 import { Dispatch } from 'redux';
 import { FormComponentProps } from 'antd/es/form';
 import { connect } from 'dva';
 import moment from 'moment';
-import AvatarList from './components/AvatarList';
 import { StateType } from './model';
 import { ListItemDataType } from './data.d';
 import StandardFormRow from './components/StandardFormRow';
 import TagSelect from './components/TagSelect';
 import styles from './style.less';
 
-const { Option } = Select;
 const FormItem = Form.Item;
 const { Paragraph } = Typography;
+const labels = ['CSS', 'JS', 'TS', 'HTML', 'Git', 'React', 'Vue', 'HTPP', '安全', '职业', 'Node.js', '设计模式', '浏览器', '技巧', '成长'];
 
 interface ProjectsProps extends FormComponentProps {
   dispatch: Dispatch<any>;
@@ -26,10 +25,7 @@ class Projects extends Component<ProjectsProps> {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'listSearchProjects/fetch',
-      payload: {
-        count: 8,
-      },
+      type: 'listSearchProjects/fetch'
     });
   }
 
@@ -52,28 +48,20 @@ class Projects extends Component<ProjectsProps> {
             <Card
               className={styles.card}
               hoverable
-              cover={<img alt={item.title} src={item.cover} />}
+              cover={<img alt={item.name} src={item.cover} />}
             >
               <Card.Meta
-                title={<a>{item.title}</a>}
+                title={<a>{item.name}</a>}
                 description={
                   <Paragraph className={styles.item} ellipsis={{ rows: 2 }}>
-                    {item.subDescription}
+                    {item.subject}
                   </Paragraph>
                 }
               />
               <div className={styles.cardItemContent}>
                 <span>{moment(item.updatedAt).fromNow()}</span>
                 <div className={styles.avatarList}>
-                  <AvatarList size="small">
-                    {item.members.map((member, index) => (
-                      <AvatarList.Item
-                        key={`${item.id}-${index}`}
-                        src={member.avatar}
-                        tips={member.name}
-                      />
-                    ))}
-                  </AvatarList>
+                  <Tag color="gold">{item.labels}</Tag>
                 </div>
               </div>
             </Card>
@@ -93,22 +81,15 @@ class Projects extends Component<ProjectsProps> {
       <div className={styles.coverCardList}>
         <Card bordered={false}>
           <Form layout="inline">
-            <StandardFormRow title="所属类目" block style={{ paddingBottom: 11 }}>
+            <StandardFormRow title="所属标签" block style={{ paddingBottom: 11 }}>
               <FormItem>
                 {getFieldDecorator('category')(
                   <TagSelect expandable>
-                    <TagSelect.Option value="cat1">类目一</TagSelect.Option>
-                    <TagSelect.Option value="cat2">类目二</TagSelect.Option>
-                    <TagSelect.Option value="cat3">类目三</TagSelect.Option>
-                    <TagSelect.Option value="cat4">类目四</TagSelect.Option>
-                    <TagSelect.Option value="cat5">类目五</TagSelect.Option>
-                    <TagSelect.Option value="cat6">类目六</TagSelect.Option>
-                    <TagSelect.Option value="cat7">类目七</TagSelect.Option>
-                    <TagSelect.Option value="cat8">类目八</TagSelect.Option>
-                    <TagSelect.Option value="cat9">类目九</TagSelect.Option>
-                    <TagSelect.Option value="cat10">类目十</TagSelect.Option>
-                    <TagSelect.Option value="cat11">类目十一</TagSelect.Option>
-                    <TagSelect.Option value="cat12">类目十二</TagSelect.Option>
+                    {
+                      labels.map((item, index) => {
+                      return <TagSelect.Option key={index} value={item}>{item}</TagSelect.Option>
+                      })
+                    }
                   </TagSelect>,
                 )}
               </FormItem>
@@ -117,21 +98,7 @@ class Projects extends Component<ProjectsProps> {
               <Row gutter={16}>
                 <Col lg={8} md={10} sm={10} xs={24}>
                   <FormItem {...formItemLayout} label="作者">
-                    {getFieldDecorator('author', {})(
-                      <Select placeholder="不限" style={{ maxWidth: 200, width: '100%' }}>
-                        <Option value="lisa">王昭君</Option>
-                      </Select>,
-                    )}
-                  </FormItem>
-                </Col>
-                <Col lg={8} md={10} sm={10} xs={24}>
-                  <FormItem {...formItemLayout} label="好评度">
-                    {getFieldDecorator('rate', {})(
-                      <Select placeholder="不限" style={{ maxWidth: 200, width: '100%' }}>
-                        <Option value="good">优秀</Option>
-                        <Option value="normal">普通</Option>
-                      </Select>,
-                    )}
+                    {getFieldDecorator('author')(<Input placeholder="请输入" />)}
                   </FormItem>
                 </Col>
               </Row>
@@ -145,13 +112,12 @@ class Projects extends Component<ProjectsProps> {
 }
 
 const WarpForm = Form.create<ProjectsProps>({
-  onValuesChange({ dispatch }: ProjectsProps) {
-    // 表单项变化时请求数据
-    // 模拟查询表单生效
+  onValuesChange(props, _, allValues) {
+    const { dispatch } = props
     dispatch({
       type: 'listSearchProjects/fetch',
       payload: {
-        count: 8,
+        ...allValues
       },
     });
   },

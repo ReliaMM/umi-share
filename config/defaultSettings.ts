@@ -54,7 +54,7 @@ export default {
   menu: {
     locale: true,
   },
-  title: '大斑马的分享屋',
+  title: '大斑马的小屋',
   pwa: false,
   collapse: true,
   iconfontUrl: '',
