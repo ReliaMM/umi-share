@@ -47,6 +47,6 @@ export default {
   'menu.editor.flow': '流程编辑器',
   'menu.editor.mind': '脑图编辑器',
   'menu.editor.koni': '拓扑编辑器',
-  'menu.projects': '卡片列表',
-  'menu.table-list': '标准列表'
+  'menu.projects': '小屋',
+  'menu.table-list': '小屋列表'
 };

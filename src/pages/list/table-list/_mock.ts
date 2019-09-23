@@ -5,24 +5,16 @@ import { TableListItem, TableListParams } from './data.d';
 // mock tableListDataSource
 let tableListDataSource: TableListItem[] = [];
 
-for (let i = 0; i < 8; i += 1) {
+for (let i = 0; i < 20; i += 1) {
   tableListDataSource.push({
     key: i,
     disabled: i % 6 === 0,
-    href: 'https://ant.design',
-    avatar: [
-      'https://gw.alipayobjects.com/zos/rmsportal/eeHMaZBwmTvLdIwMfBpg.png',
-      'https://gw.alipayobjects.com/zos/rmsportal/udxAbMEhpwthVVcjLXik.png',
-    ][i % 2],
-    name: `TradeCode ${i}`,
-    title: `一个任务名称 ${i}`,
-    owner: '曲丽丽',
-    desc: '这是一段描述',
-    callNo: Math.floor(Math.random() * 1000),
-    status: Math.floor(Math.random() * 10) % 4,
+    name: `TradeCode ${i}11`,
+    subject: '这是一段描述',
+    labels: 'JS',
+    status: Math.floor(Math.random() * 10) % 2,
     updatedAt: new Date(`2017-07-${Math.floor(i / 2) + 1}`),
-    createdAt: new Date(`2017-07-${Math.floor(i / 2) + 1}`),
-    progress: Math.ceil(Math.random() * 100),
+    createdAt: new Date(`2017-07-${Math.floor(i / 2) + 1}`)
   });
 }
 
@@ -40,7 +32,7 @@ function getRule(req: Request, res: Response, u: string) {
   if (params.sorter) {
     const s = params.sorter.split('_');
     dataSource = dataSource.sort((prev, next) => {
-      if (s[1] === 'descend') {
+      if (s[1] === 'subjectend') {
         return next[s[0]] - prev[s[0]];
       }
       return prev[s[0]] - next[s[0]];
@@ -92,7 +84,7 @@ function postRule(req: Request, res: Response, u: string, b: Request) {
   }
 
   const body = (b && b.body) || req.body;
-  const { method, name, desc, key } = body;
+  const { method, name, subject, status, labels, key } = body;
 
   switch (method) {
     /* eslint no-case-declarations:0 */
@@ -103,26 +95,18 @@ function postRule(req: Request, res: Response, u: string, b: Request) {
       const i = Math.ceil(Math.random() * 10000);
       tableListDataSource.unshift({
         key: i,
-        href: 'https://ant.design',
-        avatar: [
-          'https://gw.alipayobjects.com/zos/rmsportal/eeHMaZBwmTvLdIwMfBpg.png',
-          'https://gw.alipayobjects.com/zos/rmsportal/udxAbMEhpwthVVcjLXik.png',
-        ][i % 2],
-        name: `TradeCode ${i}`,
-        title: `一个任务名称 ${i}`,
-        owner: '曲丽丽',
-        desc,
-        callNo: Math.floor(Math.random() * 1000),
-        status: Math.floor(Math.random() * 10) % 2,
+        name,
+        subject,
+        status,
+        labels,
         updatedAt: new Date(),
-        createdAt: new Date(),
-        progress: Math.ceil(Math.random() * 100),
+        createdAt: new Date()
       });
       break;
     case 'update':
       tableListDataSource = tableListDataSource.map(item => {
         if (item.key === key) {
-          return { ...item, desc, name };
+          return { ...item, subject, name, status, labels };
         }
         return item;
       });
