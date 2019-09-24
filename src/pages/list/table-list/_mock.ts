@@ -7,7 +7,7 @@ let tableListDataSource: TableListItem[] = [];
 
 for (let i = 0; i < 20; i += 1) {
   tableListDataSource.push({
-    key: i,
+    id: i,
     disabled: i % 6 === 0,
     name: `TradeCode ${i}11`,
     subject: '这是一段描述',
@@ -84,17 +84,17 @@ function postRule(req: Request, res: Response, u: string, b: Request) {
   }
 
   const body = (b && b.body) || req.body;
-  const { method, name, subject, status, labels, key } = body;
+  const { method, name, subject, status, labels, id } = body;
 
   switch (method) {
     /* eslint no-case-declarations:0 */
     case 'delete':
-      tableListDataSource = tableListDataSource.filter(item => key.indexOf(item.key) === -1);
+      tableListDataSource = tableListDataSource.filter(item => id.indexOf(item.id) === -1);
       break;
     case 'post':
       const i = Math.ceil(Math.random() * 10000);
       tableListDataSource.unshift({
-        key: i,
+        id: i,
         name,
         subject,
         status,
@@ -105,7 +105,7 @@ function postRule(req: Request, res: Response, u: string, b: Request) {
       break;
     case 'update':
       tableListDataSource = tableListDataSource.map(item => {
-        if (item.key === key) {
+        if (item.id === id) {
           return { ...item, subject, name, status, labels };
         }
         return item;

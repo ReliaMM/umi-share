@@ -78,6 +78,9 @@ export default {
     defaultGitUrl: 'https://github.com/ant-design/pro-blocks',
   },
   hash: true,
+  base: '/',
+  publicPath: '/public/dist/',
+  history: 'hash',
   targets: {
     ie: 11,
   },
@@ -188,9 +191,9 @@ export default {
   chainWebpack: webpackPlugin,
   proxy: {
     '/api/': {
-      target: 'http://192.168.12.83:3000/',
+      target: 'http://192.168.12.83:7001/',
       changeOrigin: true,
-      pathRewrite: { '^/api': '' },
+      // pathRewrite: { '^/api': '' },
     },
   }
 } as IConfig;

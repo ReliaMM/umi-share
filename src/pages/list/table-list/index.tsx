@@ -85,10 +85,12 @@ class TableList extends Component<TableListProps, TableListState> {
   columns: StandardTableColumnProps[] = [
     {
       title: '文章名称',
+      width: '100px',
       dataIndex: 'name',
     },
     {
       title: '文章简介',
+      width: '300px',
       dataIndex: 'subject',
     },
     {
@@ -200,11 +202,15 @@ class TableList extends Component<TableListProps, TableListState> {
         dispatch({
           type: 'listTableList/remove',
           payload: {
-            key: selectedRows.map(row => row.key),
+            id: selectedRows.map(row => row.id),
           },
           callback: () => {
             this.setState({
               selectedRows: [],
+            });
+            dispatch({
+              type: 'listTableList/fetch',
+              payload: { }
             });
           },
         });
@@ -253,10 +259,14 @@ class TableList extends Component<TableListProps, TableListState> {
 
   handleAdd = (fields: FormValsType) => {
     const { dispatch } = this.props;
-    const type = fields.key ? 'listTableList/update' : 'listTableList/add';
+    const type = fields.id ? 'listTableList/update' : 'listTableList/add';
     dispatch({
       type,
       payload: fields
+    });
+    dispatch({
+      type: 'listTableList/fetch',
+      payload: { }
     });
     message.success('操作成功');
     this.handleModalVisible();

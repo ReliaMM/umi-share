@@ -36,7 +36,6 @@ class Projects extends Component<ProjectsProps> {
       form,
     } = this.props;
     const { getFieldDecorator } = form;
-
     const cardList = list ? (
       <List<ListItemDataType>
         rowKey="id"

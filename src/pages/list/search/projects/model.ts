@@ -36,7 +36,7 @@ const Model: ModelType = {
       const response = yield call(queryFakeList, payload);
       yield put({
         type: 'queryList',
-        payload: Array.isArray(response) ? response : [],
+        payload: response
       });
     },
   },
@@ -45,7 +45,7 @@ const Model: ModelType = {
     queryList(state, action) {
       return {
         ...state,
-        list: action.payload,
+        ...action.payload,
       };
     },
   },

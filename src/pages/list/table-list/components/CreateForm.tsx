@@ -4,7 +4,7 @@ import { FormComponentProps } from 'antd/es/form';
 import React from 'react';
 import { TableListItem } from '../data.d';
 export interface FormValsType extends Partial<TableListItem> {
-  key?: number;
+  id?: number;
   name?: string;
   subject?: string;
   labels?: string;
@@ -25,7 +25,7 @@ const CreateForm: React.FC<CreateFormProps> = props => {
     form.validateFields((err, fieldsValue) => {
       if (err) return;
       form.resetFields();
-      const fields = values.key ? {...fieldsValue, key: values.key } : fieldsValue;
+      const fields = values.id ? {...fieldsValue, id: values.id } : fieldsValue;
       handleAdd(fields);
     });
   };
