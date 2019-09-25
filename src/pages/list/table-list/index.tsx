@@ -85,8 +85,11 @@ class TableList extends Component<TableListProps, TableListState> {
   columns: StandardTableColumnProps[] = [
     {
       title: '文章名称',
-      width: '100px',
+      width: '150px',
       dataIndex: 'name',
+      render(val: IStatusMapType, record) {
+        return <a href={record.link} target="_blank">{ val }</a>;
+      },
     },
     {
       title: '文章简介',

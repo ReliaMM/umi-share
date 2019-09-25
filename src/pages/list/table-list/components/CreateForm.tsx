@@ -7,6 +7,8 @@ export interface FormValsType extends Partial<TableListItem> {
   id?: number;
   name?: string;
   subject?: string;
+  link?: string;
+  cover?: string;
   labels?: string;
   status?: number;
 }
@@ -37,19 +39,31 @@ const CreateForm: React.FC<CreateFormProps> = props => {
       onOk={okHandle}
       onCancel={() => handleModalVisible()}
     >
-      <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="文章名称">
+      <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="名称">
         {form.getFieldDecorator('name', {
           rules: [{ required: true, message: '请输入至少五个字符的文章名称！', min: 2 }],
           initialValue: values.name,
         })(<Input placeholder="请输入" />)}
       </FormItem>
-      <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="文章简介">
+      <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="原文地址">
+        {form.getFieldDecorator('link', {
+          rules: [{ required: true, message: '请输入至少五个字符的原文地址！', min: 2 }],
+          initialValue: values.link,
+        })(<Input placeholder="请输入" />)}
+      </FormItem>
+      <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="图片地址">
+        {form.getFieldDecorator('cover', {
+          rules: [{ required: true, message: '请输入至少五个字符的图片地址！', min: 2 }],
+          initialValue: values.cover,
+        })(<Input placeholder="请输入" />)}
+      </FormItem>
+      <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="简介">
         {form.getFieldDecorator('subject', {
           rules: [{ required: true, message: '请输入至少二十个字符的规则描述！', min: 3 }],
           initialValue: values.subject,
         })(<Input placeholder="请输入" />)}
       </FormItem>
-      <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="文章状态">
+      <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="标签">
         {form.getFieldDecorator('labels', {
           rules: [{ required: true, message: '请选择' }],
           initialValue: values.labels,
@@ -63,10 +77,10 @@ const CreateForm: React.FC<CreateFormProps> = props => {
           </Select>
         )}
       </FormItem>
-      <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="文章状态">
+      <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="状态">
         {form.getFieldDecorator('status', {
           rules: [{ required: true, message: '请选择' }],
-          initialValue: values.status || 1,
+          initialValue: values.status
         })(
           <Select style={{ width: '100%' }}>
             <Option value={0}>展示</Option>

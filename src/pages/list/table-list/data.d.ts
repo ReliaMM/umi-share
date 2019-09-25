@@ -4,6 +4,8 @@ export interface TableListItem {
   name: string;
   subject: string;
   status: number;
+  cover: string;
+  link: string;
   labels: string;
   updatedAt: Date;
   createdAt: Date;

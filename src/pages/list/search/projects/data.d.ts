@@ -9,6 +9,7 @@ export interface ListItemDataType {
   name: string;
   labels: string;
   cover: string;
+  link: string;
   subject: string;
   updatedAt: number;
   createdAt: number;

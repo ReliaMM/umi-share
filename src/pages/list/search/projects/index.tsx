@@ -50,7 +50,7 @@ class Projects extends Component<ProjectsProps> {
               cover={<img alt={item.name} src={item.cover} />}
             >
               <Card.Meta
-                title={<a>{item.name}</a>}
+                title={<a href={item.link} target="_blank">{item.name}</a>}
                 description={
                   <Paragraph className={styles.item} ellipsis={{ rows: 2 }}>
                     {item.subject}
@@ -96,8 +96,8 @@ class Projects extends Component<ProjectsProps> {
             <StandardFormRow title="其它选项" grid last>
               <Row gutter={16}>
                 <Col lg={8} md={10} sm={10} xs={24}>
-                  <FormItem {...formItemLayout} label="作者">
-                    {getFieldDecorator('author')(<Input placeholder="请输入" />)}
+                  <FormItem {...formItemLayout} label="题目">
+                    {getFieldDecorator('name')(<Input placeholder="请输入" />)}
                   </FormItem>
                 </Col>
               </Row>
