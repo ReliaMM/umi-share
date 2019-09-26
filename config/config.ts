@@ -24,11 +24,11 @@ const plugins: IPlugin[] = [
         // default true, when it is true, will use `navigator.language` overwrite default
         baseNavigator: true,
       },
-      // dynamicImport: {
-      //   loadingComponent: './components/PageLoading/index',
-      //   webpackChunkName: true,
-      //   level: 3,
-      // },
+      dynamicImport: {
+        loadingComponent: './components/PageLoading/index',
+        webpackChunkName: true,
+        level: 3,
+      },
       pwa: pwa
         ? {
             workboxPluginMode: 'InjectManifest',
@@ -80,10 +80,12 @@ export default {
   hash: true,
   base: '/',
   publicPath: '/public/dist/',
+  outputPath: '../zebra-map-egg/app/public/dist',
   history: 'hash',
   targets: {
     ie: 11,
   },
+  treeShaking: true,
   devtool: isAntDesignProPreview ? 'source-map' : false,
   // umi routes: https://umijs.org/zh/guide/router.html
   routes: [
@@ -191,7 +193,7 @@ export default {
   chainWebpack: webpackPlugin,
   proxy: {
     '/api/': {
-      target: 'http://192.168.12.83:7001/',
+      target: 'http://0.0.0.0:7001/',
       changeOrigin: true,
       // pathRewrite: { '^/api': '' },
     },
