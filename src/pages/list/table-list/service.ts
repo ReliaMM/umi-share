@@ -3,7 +3,7 @@ import { TableListParams } from './data.d';
 
 export async function queryRule(params: TableListParams) {
   // return request('/api/rule', {
-  return request('/api/share/list', {
+  return request('/api/share/tableList', {
     params,
   });
 }

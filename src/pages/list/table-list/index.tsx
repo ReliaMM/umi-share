@@ -238,8 +238,8 @@ class TableList extends Component<TableListProps, TableListState> {
       if (err) return;
 
       const values = {
-        ...fieldsValue,
-        updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
+        ...fieldsValue
+        // updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
       };
 
       this.setState({
@@ -290,6 +290,7 @@ class TableList extends Component<TableListProps, TableListState> {
             <FormItem label="文章状态">
               {getFieldDecorator('status')(
                 <Select placeholder="请选择" style={{ width: '100%' }}>
+                  <Option value="">请选择</Option>
                   <Option value="0">展示</Option>
                   <Option value="1">不展示</Option>
                 </Select>,
@@ -330,6 +331,7 @@ class TableList extends Component<TableListProps, TableListState> {
             <FormItem label="文章状态">
               {getFieldDecorator('status')(
                 <Select placeholder="请选择" style={{ width: '100%' }}>
+                  <Option value="">请选择</Option>
                   <Option value="0">展示</Option>
                   <Option value="1">不展示</Option>
                 </Select>,
@@ -361,6 +363,7 @@ class TableList extends Component<TableListProps, TableListState> {
             <FormItem label="文章标签">
               {getFieldDecorator('labels')(
                 <Select placeholder="请选择" style={{ width: '100%' }}>
+                  <Option value="">请选择</Option>
                   {
                     labels.map((item, index) => {
                      return <Option value={item} key={index}>{ item }</Option>
