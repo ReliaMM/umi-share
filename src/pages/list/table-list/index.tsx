@@ -265,11 +265,13 @@ class TableList extends Component<TableListProps, TableListState> {
     const type = fields.id ? 'listTableList/update' : 'listTableList/add';
     dispatch({
       type,
-      payload: fields
-    });
-    dispatch({
-      type: 'listTableList/fetch',
-      payload: { }
+      payload: fields,
+      callback: () => {
+        dispatch({
+          type: 'listTableList/fetch',
+          payload: { }
+        });
+      }
     });
     message.success('操作成功');
     this.handleModalVisible();
