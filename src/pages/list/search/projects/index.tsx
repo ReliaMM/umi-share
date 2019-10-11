@@ -47,7 +47,7 @@ class Projects extends Component<ProjectsProps> {
             <Card
               className={styles.card}
               hoverable
-              cover={<img alt={item.name} src={item.cover} />}
+              cover={<img className={styles.cardImg} alt={item.name} src={item.cover} />}
             >
               <Card.Meta
                 title={<a href={item.link} target="_blank">{item.name}</a>}
