@@ -45,8 +45,8 @@ export interface DefaultSettings {
 export default {
   navTheme: 'light',
   primaryColor: '#ff8e1d',
-  layout: 'topmenu',
-  contentWidth: 'Fixed',
+  layout: 'sidemenu',
+  contentWidth: 'Fluid',
   fixedHeader: true,
   autoHideHeader: false,
   fixSiderbar: false,

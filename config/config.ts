@@ -120,14 +120,42 @@ export default {
               component: './Welcome',
             },
             {
-              name: 'projects',
-              path: '/list/search/projects',
-              component: './list/search/projects',
+              path: '/bookmarks',
+              name: 'bookmarks',
+              icon: 'profile',
+              routes: [
+                {
+                  name: 'list',
+                  path: '/bookmarks/list',
+                  component: './bookmarks/list',
+                  exact: true
+                },
+                {
+                  name: 'card',
+                  path: '/bookmarks/card',
+                  component: './bookmarks/card',
+                  exact: true
+                }
+              ]
             },
             {
-              name: 'table-list',
-              path: '/list/table-list',
-              component: './list/table-list',
+              path: '/share',
+              name: 'share',
+              icon: 'contacts',
+              routes: [
+                {
+                  name: 'list',
+                  path: '/share/list',
+                  component: './share/list',
+                  exact: true
+                },
+                {
+                  name: 'card',
+                  path: '/share/card',
+                  component: './share/card',
+                  exact: true
+                }
+              ]
             },
             {
               component: './404',
