@@ -135,6 +135,12 @@ export default {
                   path: '/bookmarks/card',
                   component: './bookmarks/card',
                   exact: true
+                },
+                {
+                  name: 'type',
+                  path: '/bookmarks/type',
+                  component: './bookmarks/type',
+                  exact: true
                 }
               ]
             },
