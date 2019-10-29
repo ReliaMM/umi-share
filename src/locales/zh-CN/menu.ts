@@ -49,6 +49,7 @@ export default {
   'menu.editor.koni': '拓扑编辑器',
   'menu.bookmarks.list': '技能列表',
   'menu.bookmarks.type': '类别列表',
+  'menu.bookmarks.tag': '标签列表',
   'menu.bookmarks.card': '技能卡',
   'menu.bookmarks': '技能小屋',
   'menu.share.list': '分享列表',

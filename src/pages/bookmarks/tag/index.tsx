@@ -1,10 +1,14 @@
 import {
   Button,
   Card,
+  Col,
   Dropdown,
   Form,
   Icon,
+  Input,
   Menu,
+  Row,
+  Select,
   message,
 } from 'antd';
 import React, { Component, Fragment } from 'react';
@@ -14,13 +18,15 @@ import { FormComponentProps } from 'antd/es/form';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { SorterResult } from 'antd/es/table';
 import { connect } from 'dva';
-import { StateType } from './model';
+import { TagState } from './model';
 import CreateForm, { FormValsType } from './components/CreateForm';
 import StandardTable, { StandardTableColumnProps } from './components/StandardTable';
 import { TableListItem, TableListPagination, TableListParams } from './data.d';
 
 import styles from './style.less';
 
+const FormItem = Form.Item;
+const { Option } = Select;
 const getValue = (obj: { [x: string]: string[] }) =>
   Object.keys(obj)
     .map(key => obj[key])
@@ -29,7 +35,7 @@ const getValue = (obj: { [x: string]: string[] }) =>
 interface TableListProps extends FormComponentProps {
   dispatch: Dispatch<any>;
   loading: boolean;
-  bookmarksType: StateType;
+  bookmarksTag: TagState;
 }
 
 interface TableListState {
@@ -44,17 +50,17 @@ interface TableListState {
 /* eslint react/no-multi-comp:0 */
 @connect(
   ({
-    bookmarksType,
+    bookmarksTag,
     loading,
   }: {
-    bookmarksType: StateType;
+    bookmarksTag: TagState;
     loading: {
       models: {
         [key: string]: boolean;
       };
     };
   }) => ({
-    bookmarksType,
+    bookmarksTag,
     loading: loading.models.rule,
   }),
 )
@@ -70,14 +76,18 @@ class TableList extends Component<TableListProps, TableListState> {
 
   columns: StandardTableColumnProps[] = [
     {
-      title: '类别名称',
-      width: '200px',
-      dataIndex: 'name'
+      title: '标签名称',
+      width: '150px',
+      dataIndex: 'name',
     },
     {
-      title: '列表简介',
+      title: '标签简介',
       width: '300px',
       dataIndex: 'subject',
+    },
+    {
+      title: '所属类别',
+      dataIndex: 'type',
     },
     {
       title: '操作',
@@ -92,7 +102,10 @@ class TableList extends Component<TableListProps, TableListState> {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'bookmarksType/fetch',
+      type: 'bookmarksTag/fetch',
+    });
+    dispatch({
+      type: 'bookmarksTag/option',
     });
   }
 
@@ -121,8 +134,27 @@ class TableList extends Component<TableListProps, TableListState> {
     }
 
     dispatch({
-      type: 'bookmarksType/fetch',
+      type: 'bookmarksTag/fetch',
       payload: params,
+    });
+  };
+
+  handleFormReset = () => {
+    const { form, dispatch } = this.props;
+    form.resetFields();
+    this.setState({
+      formValues: {},
+    });
+    dispatch({
+      type: 'bookmarksTag/fetch',
+      payload: {},
+    });
+  };
+
+  toggleForm = () => {
+    const { expandForm } = this.state;
+    this.setState({
+      expandForm: !expandForm,
     });
   };
 
@@ -134,7 +166,7 @@ class TableList extends Component<TableListProps, TableListState> {
     switch (e.key) {
       case 'remove':
         dispatch({
-          type: 'bookmarksType/remove',
+          type: 'bookmarksTag/remove',
           payload: {
             id: selectedRows.map(row => row.id),
           },
@@ -143,7 +175,7 @@ class TableList extends Component<TableListProps, TableListState> {
               selectedRows: [],
             });
             dispatch({
-              type: 'bookmarksType/fetch',
+              type: 'bookmarksTag/fetch',
               payload: { }
             });
           },
@@ -177,7 +209,7 @@ class TableList extends Component<TableListProps, TableListState> {
       });
 
       dispatch({
-        type: 'bookmarksType/fetch',
+        type: 'bookmarksTag/fetch',
         payload: values,
       });
     });
@@ -192,13 +224,13 @@ class TableList extends Component<TableListProps, TableListState> {
 
   handleAdd = (fields: FormValsType) => {
     const { dispatch } = this.props;
-    const type = fields.id ? 'bookmarksType/update' : 'bookmarksType/add';
+    const type = fields.id ? 'bookmarksTag/update' : 'bookmarksTag/add';
     dispatch({
       type,
       payload: fields,
       callback: () => {
         dispatch({
-          type: 'bookmarksType/fetch',
+          type: 'bookmarksTag/fetch',
           payload: { }
         });
       }
@@ -207,9 +239,49 @@ class TableList extends Component<TableListProps, TableListState> {
     this.handleModalVisible();
   };
 
+  renderSimpleForm() {
+    const { form,  bookmarksTag: { opt } } = this.props;
+    const { getFieldDecorator } = form;
+    const selectOption = opt.list
+    return (
+      <Form onSubmit={this.handleSearch} layout="inline">
+        <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+          <Col md={8} sm={24}>
+            <FormItem label="标签名称">
+              {getFieldDecorator('name')(<Input placeholder="请输入" />)}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <FormItem label="所属类别">
+            {getFieldDecorator('type')(
+              <Select placeholder="请选择" style={{ width: '100%' }}>
+                {
+                  selectOption.map((item, index) => {
+                    return <Option value={item.id} key={index}>{ item.name }</Option>
+                  })
+                }
+              </Select>,
+            )}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <span className={styles.submitButtons}>
+              <Button type="primary" htmlType="submit">
+                查询
+              </Button>
+              <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
+                重置
+              </Button>
+            </span>
+          </Col>
+        </Row>
+      </Form>
+    );
+  }
+
   render() {
     const {
-      bookmarksType: { data },
+      bookmarksTag: { data, opt },
       loading
     } = this.props;
     const { selectedRows, modalVisible, stepFormValues } = this.state;
@@ -218,6 +290,7 @@ class TableList extends Component<TableListProps, TableListState> {
         <Menu.Item key="remove">删除</Menu.Item>
       </Menu>
     );
+    const selectOption = opt.list
     const parentMethods = {
       handleAdd: this.handleAdd,
       handleModalVisible: this.handleModalVisible,
@@ -226,6 +299,7 @@ class TableList extends Component<TableListProps, TableListState> {
       <PageHeaderWrapper>
         <Card bordered={false}>
           <div className={styles.tableList}>
+            <div className={styles.tableListForm}>{this.renderSimpleForm()}</div>
             <div className={styles.tableListOperator}>
               <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
                 新建
@@ -252,6 +326,7 @@ class TableList extends Component<TableListProps, TableListState> {
         </Card>
         <CreateForm
           {...parentMethods}
+          option={ selectOption }
           values={stepFormValues}
           modalVisible={modalVisible}
         />

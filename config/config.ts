@@ -141,6 +141,12 @@ export default {
                   path: '/bookmarks/type',
                   component: './bookmarks/type',
                   exact: true
+                },
+                {
+                  name: 'tag',
+                  path: '/bookmarks/tag',
+                  component: './bookmarks/tag',
+                  exact: true
                 }
               ]
             },

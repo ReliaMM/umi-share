@@ -1,47 +1,63 @@
 import { AnyAction, Reducer } from 'redux';
 import { EffectsCommandMap } from 'dva';
 import { addRule, queryRule, removeRule, updateRule } from './service';
-
+import { queryRule as queryType } from '../type/service';
+import { TableListData as TypeTableListData } from '../type/data.d';
+import { StateOptionType } from '../type/model';
 import { TableListData } from './data.d';
 
-export interface StateType {
+export interface TagDataState {
   data: TableListData;
 }
 
-export interface StateOptionType {
-  opt: TableListData;
+export interface TagState {
+  data: TableListData;
+  opt: TypeTableListData;
 }
 
 export type Effect = (
   action: AnyAction,
-  effects: EffectsCommandMap & { select: <T>(func: (state: StateType) => T) => T },
+  effects: EffectsCommandMap & { select: <T>(func: (state: TagState) => T) => T },
 ) => void;
 
 export interface ModelType {
   namespace: string;
-  state: StateType;
+  state: TagState;
   effects: {
+    option: Effect;
     fetch: Effect;
     add: Effect;
     remove: Effect;
     update: Effect;
   };
   reducers: {
-    save: Reducer<StateType>;
+    save: Reducer<TagDataState>;
+    getOpt: Reducer<StateOptionType>;
   };
 }
 
 const Model: ModelType = {
-  namespace: 'bookmarksType',
+  namespace: 'bookmarksTag',
 
   state: {
     data: {
       list: [],
       pagination: {},
     },
+    opt: {
+      list: [],
+      pagination: {},
+    },
   },
 
   effects: {
+    *option({ payload }, { call, put }) {
+      const response = yield call(queryType, payload);
+      yield put({
+        type: 'getOpt',
+        payload: response,
+      });
+    },
     *fetch({ payload }, { call, put }) {
       const response = yield call(queryRule, payload);
       yield put({
@@ -82,6 +98,12 @@ const Model: ModelType = {
         data: action.payload,
       };
     },
+    getOpt(state, action) {
+      return {
+        ...state,
+        opt: action.payload,
+      };
+    }
   },
 };
 
