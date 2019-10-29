@@ -88,6 +88,11 @@ class TableList extends Component<TableListProps, TableListState> {
     {
       title: '所属类别',
       dataIndex: 'type',
+      render: (text, record) => (
+        <span>
+          { record.bookmark_type.name || '' }
+        </span>
+      ),
     },
     {
       title: '操作',
@@ -106,6 +111,9 @@ class TableList extends Component<TableListProps, TableListState> {
     });
     dispatch({
       type: 'bookmarksTag/option',
+      payload: {
+        pageSize: 1000,
+      }
     });
   }
 
