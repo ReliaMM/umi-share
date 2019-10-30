@@ -7,8 +7,13 @@ export interface TableListItem {
   link: string;
   type: number;
   tag: number;
+  bookmark_type: TypeTagList;
+  bookmark_tag: TypeTagList;
 }
 
+interface TypeTagList {
+  name: string;
+}
 export interface TableListPagination {
   total: number;
   pageSize: number;
@@ -18,13 +23,17 @@ export interface CascaderOption {
   id: string;
   name?: React.ReactNode;
   disabled?: boolean;
-  children?: CascaderOption[];
+  bookmark_tags?: CascaderOption[];
 }
 export interface TableListData {
   list: TableListItem[];
   pagination: Partial<TableListPagination>;
 }
 
+export interface CascaderListData {
+  list: CascaderOption[];
+  pagination: Partial<TableListPagination>;
+}
 export interface TableListParams {
   sorter: string;
   status: string;

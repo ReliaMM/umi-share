@@ -10,6 +10,7 @@ import {
   Row,
   Cascader,
   message,
+  Avatar,
 } from 'antd';
 import React, { Component, Fragment } from 'react';
 
@@ -32,36 +33,6 @@ const getValue = (obj: { [x: string]: string[] }) =>
     .join(',');
 
 type IStatusMapType = 'success' | 'error';
-const options = [
-  {
-    id: '1',
-    name: '前端',
-    children: [
-      {
-        id: '1',
-        name: '学习平台',
-      },
-      {
-        id: '2',
-        name: '在线编程',
-      },
-    ],
-  },
-  {
-    id: '2',
-    name: '产品',
-    children: [
-      {
-        id: '3',
-        name: '原型设计',
-      },
-      {
-        id: '4',
-        name: '文档编辑',
-      },
-    ],
-  }
-]
 
 interface TableListProps extends FormComponentProps {
   dispatch: Dispatch<any>;
@@ -110,28 +81,36 @@ class TableList extends Component<TableListProps, TableListState> {
       title: '技能名称',
       width: '150px',
       dataIndex: 'name',
-    },
-    {
-      title: '技能简介',
-      width: '300px',
-      dataIndex: 'subject',
-    },
-    {
-      title: '技能名称',
-      width: '150px',
-      dataIndex: 'icon',
       render(val: IStatusMapType, record) {
         return <a href={record.link} target="_blank">{ val }</a>;
       },
     },
     {
+      title: '技能简介',
+      width: '200px',
+      dataIndex: 'subject',
+    },
+    {
+      title: '技能图标',
+      width: '60px',
+      dataIndex: 'icon',
+      render(val: IStatusMapType, record) {
+        return <Avatar size="small" src={record.icon}></Avatar>;
+      },
+    },
+    {
       title: '类别',
-      width: '300px',
       dataIndex: 'type',
+      render(val: IStatusMapType, record) {
+        return record.bookmark_type.name
+      },
     },
     {
       title: '标签',
       dataIndex: 'tag',
+      render(val: IStatusMapType, record) {
+        return record.bookmark_tag.name
+      },
     },
     {
       title: '操作',
@@ -147,6 +126,9 @@ class TableList extends Component<TableListProps, TableListState> {
     const { dispatch } = this.props;
     dispatch({
       type: 'bookmarksList/fetch',
+    });
+    dispatch({
+      type: 'bookmarksList/cascader',
     });
   }
 
@@ -316,13 +298,15 @@ class TableList extends Component<TableListProps, TableListState> {
   onChange (value: string[]) {
     console.log(value)
   }
-  cascaderFilter (inputValue: string, path: CascaderOption[]): boolean | undefined{
+  cascaderFilter (inputValue: string, path: CascaderOption[]): boolean | undefined {
     return path.some(option => option.id.toLowerCase().indexOf(inputValue.toLowerCase()) > -1);
   }
   renderAdvancedForm() {
     const {
       form: { getFieldDecorator },
+      bookmarksList: { opt }
     } = this.props;
+    const options = opt.list
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
@@ -342,7 +326,7 @@ class TableList extends Component<TableListProps, TableListState> {
             <FormItem label="技能类别">
               {getFieldDecorator('labels')(
                 <Cascader
-                  fieldNames={{ label: 'name', value: 'id', children: 'children' }}
+                  fieldNames={{ label: 'name', value: 'id', children: 'bookmark_tags' }}
                   options={options}
                   onChange={this.onChange}
                   placeholder="请选择"
@@ -376,9 +360,10 @@ class TableList extends Component<TableListProps, TableListState> {
 
   render() {
     const {
-      bookmarksList: { data },
+      bookmarksList: { data, opt },
       loading
     } = this.props;
+    const options = opt.list
     const { selectedRows, modalVisible, stepFormValues } = this.state;
     const menu = (
       <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
@@ -421,6 +406,7 @@ class TableList extends Component<TableListProps, TableListState> {
         </Card>
         <CreateForm
           {...parentMethods}
+          option={options}
           values={stepFormValues}
           modalVisible={modalVisible}
         />

@@ -1,4 +1,4 @@
-import { Form, Input, Modal, Select, Cascader } from 'antd';
+import { Form, Input, Modal, Cascader } from 'antd';
 
 import { FormComponentProps } from 'antd/es/form';
 import React from 'react';
@@ -17,41 +17,12 @@ interface CreateFormProps extends FormComponentProps {
   modalVisible: boolean;
   handleAdd: (fieldsValue: FormValsType) => void;
   handleModalVisible: () => void;
+  option: CascaderOption[];
   values: FormValsType
 }
-const options = [
-  {
-    id: '1',
-    name: '前端',
-    children: [
-      {
-        id: '1',
-        name: '学习平台',
-      },
-      {
-        id: '2',
-        name: '在线编程',
-      },
-    ],
-  },
-  {
-    id: '2',
-    name: '产品',
-    children: [
-      {
-        id: '3',
-        name: '原型设计',
-      },
-      {
-        id: '4',
-        name: '文档编辑',
-      },
-    ],
-  }
-]
 
 const CreateForm: React.FC<CreateFormProps> = props => {
-  const { modalVisible, form, handleAdd, handleModalVisible, values } = props;
+  const { modalVisible, form, handleAdd, handleModalVisible, values, option : opt } = props;
   const okHandle = () => {
     form.validateFields((err, fieldsValue) => {
       if (err) return;
@@ -101,11 +72,11 @@ const CreateForm: React.FC<CreateFormProps> = props => {
       <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="技能类别">
         {form.getFieldDecorator('type', {
           rules: [{ required: true, message: '请选择' }],
-          initialValue: values.type,
+          initialValue: [values.type, values.tag ],
         })(
           <Cascader
-            fieldNames={{ label: 'name', value: 'id', children: 'children' }}
-            options={options}
+            fieldNames={{ label: 'name', value: 'id', children: 'bookmark_tags' }}
+            options={opt}
             onChange={onChange}
             placeholder="请选择"
             showSearch={cascaderFilter}

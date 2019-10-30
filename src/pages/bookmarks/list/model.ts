@@ -1,11 +1,18 @@
 import { AnyAction, Reducer } from 'redux';
 import { EffectsCommandMap } from 'dva';
-import { addRule, queryRule, removeRule, updateRule } from './service';
+import { addRule, queryCascader, queryRule, removeRule, updateRule } from './service';
 
-import { TableListData } from './data.d';
+import { TableListData, CascaderListData } from './data.d';
 
 export interface StateType {
   data: TableListData;
+  opt: CascaderListData;
+}
+export interface StateList {
+  data: TableListData;
+}
+export interface StateOptionType {
+  opt: CascaderListData;
 }
 
 export type Effect = (
@@ -18,12 +25,14 @@ export interface ModelType {
   state: StateType;
   effects: {
     fetch: Effect;
+    cascader: Effect;
     add: Effect;
     remove: Effect;
     update: Effect;
   };
   reducers: {
-    save: Reducer<StateType>;
+    save: Reducer<StateList>;
+    getOpt: Reducer<StateOptionType>;
   };
 }
 
@@ -35,6 +44,10 @@ const Model: ModelType = {
       list: [],
       pagination: {},
     },
+    opt: {
+      list: [],
+      pagination: {},
+    }
   },
 
   effects: {
@@ -42,6 +55,13 @@ const Model: ModelType = {
       const response = yield call(queryRule, payload);
       yield put({
         type: 'save',
+        payload: response,
+      });
+    },
+    *cascader({ payload }, { call, put }) {
+      const response = yield call(queryCascader, payload);
+      yield put({
+        type: 'getOpt',
         payload: response,
       });
     },
@@ -78,6 +98,12 @@ const Model: ModelType = {
         data: action.payload,
       };
     },
+    getOpt(state, action) {
+      return {
+        ...state,
+        opt: action.payload,
+      };
+    }
   },
 };
 
