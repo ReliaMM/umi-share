@@ -324,7 +324,7 @@ class TableList extends Component<TableListProps, TableListState> {
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={16} sm={24}>
             <FormItem label="技能类别">
-              {getFieldDecorator('labels')(
+              {getFieldDecorator('type')(
                 <Cascader
                   fieldNames={{ label: 'name', value: 'id', children: 'bookmark_tags' }}
                   options={options}

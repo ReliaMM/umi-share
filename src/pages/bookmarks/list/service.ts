@@ -3,7 +3,11 @@ import { TableListParams } from './data.d';
 
 export async function queryRule(params: TableListParams) {
   return request('/api/bookmarks/list/tableList', {
-    params,
+    method: 'POST',
+    data: {
+      ...params,
+      method: 'post',
+    },
   });
 }
 
