@@ -3,12 +3,10 @@ export interface TableListItem {
   disabled?: boolean;
   name: string;
   subject: string;
-  status: number;
-  cover: string;
+  icon: string;
   link: string;
-  labels: string;
-  updatedAt: Date;
-  createdAt: Date;
+  type: number;
+  tag: number;
 }
 
 export interface TableListPagination {
@@ -16,7 +14,12 @@ export interface TableListPagination {
   pageSize: number;
   current: number;
 }
-
+export interface CascaderOption {
+  id: string;
+  name?: React.ReactNode;
+  disabled?: boolean;
+  children?: CascaderOption[];
+}
 export interface TableListData {
   list: TableListItem[];
   pagination: Partial<TableListPagination>;

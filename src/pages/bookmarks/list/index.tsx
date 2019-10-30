@@ -1,16 +1,14 @@
 import {
-  Badge,
   Button,
   Card,
   Col,
-  DatePicker,
   Dropdown,
   Form,
   Icon,
   Input,
   Menu,
   Row,
-  Select,
+  Cascader,
   message,
 } from 'antd';
 import React, { Component, Fragment } from 'react';
@@ -20,30 +18,55 @@ import { FormComponentProps } from 'antd/es/form';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { SorterResult } from 'antd/es/table';
 import { connect } from 'dva';
-import moment from 'moment';
 import { StateType } from './model';
 import CreateForm, { FormValsType } from './components/CreateForm';
 import StandardTable, { StandardTableColumnProps } from './components/StandardTable';
-import { TableListItem, TableListPagination, TableListParams } from './data.d';
+import { TableListItem, TableListPagination, TableListParams, CascaderOption } from './data.d';
 
 import styles from './style.less';
 
 const FormItem = Form.Item;
-const { Option } = Select;
 const getValue = (obj: { [x: string]: string[] }) =>
   Object.keys(obj)
     .map(key => obj[key])
     .join(',');
 
 type IStatusMapType = 'success' | 'error';
-const statusMap = ['success', 'error'];
-const status = ['展示', '不展示'];
-const labels = ['CSS', 'JS', 'TS', 'HTML', 'Git', 'React', 'Vue', 'HTPP', '安全', '职业', 'Node.js', '设计模式', '浏览器', '技巧', '成长'];
+const options = [
+  {
+    id: '1',
+    name: '前端',
+    children: [
+      {
+        id: '1',
+        name: '学习平台',
+      },
+      {
+        id: '2',
+        name: '在线编程',
+      },
+    ],
+  },
+  {
+    id: '2',
+    name: '产品',
+    children: [
+      {
+        id: '3',
+        name: '原型设计',
+      },
+      {
+        id: '4',
+        name: '文档编辑',
+      },
+    ],
+  }
+]
 
 interface TableListProps extends FormComponentProps {
   dispatch: Dispatch<any>;
   loading: boolean;
-  listTableList: StateType;
+  bookmarksList: StateType;
 }
 
 interface TableListState {
@@ -58,17 +81,17 @@ interface TableListState {
 /* eslint react/no-multi-comp:0 */
 @connect(
   ({
-    listTableList,
+    bookmarksList,
     loading,
   }: {
-    listTableList: StateType;
+    bookmarksList: StateType;
     loading: {
       models: {
         [key: string]: boolean;
       };
     };
   }) => ({
-    listTableList,
+    bookmarksList,
     loading: loading.models.rule,
   }),
 )
@@ -84,50 +107,31 @@ class TableList extends Component<TableListProps, TableListState> {
 
   columns: StandardTableColumnProps[] = [
     {
-      title: '文章名称',
+      title: '技能名称',
       width: '150px',
       dataIndex: 'name',
+    },
+    {
+      title: '技能简介',
+      width: '300px',
+      dataIndex: 'subject',
+    },
+    {
+      title: '技能名称',
+      width: '150px',
+      dataIndex: 'icon',
       render(val: IStatusMapType, record) {
         return <a href={record.link} target="_blank">{ val }</a>;
       },
     },
     {
-      title: '文章简介',
+      title: '类别',
       width: '300px',
-      dataIndex: 'subject',
-    },
-    {
-      title: '文章状态',
-      dataIndex: 'status',
-      filters: [
-        {
-          text: status[0],
-          value: '0',
-        },
-        {
-          text: status[1],
-          value: '1',
-        },
-      ],
-      render(val: IStatusMapType) {
-        return <Badge status={statusMap[val]} text={status[val]} />;
-      },
+      dataIndex: 'type',
     },
     {
       title: '标签',
-      dataIndex: 'labels'
-    },
-    {
-      title: '更新日期',
-      dataIndex: 'updatedAt',
-      sorter: true,
-      render: (val: string) => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
-    },
-    {
-      title: '创建日期',
-      dataIndex: 'createdAt',
-      sorter: true,
-      render: (val: string) => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
+      dataIndex: 'tag',
     },
     {
       title: '操作',
@@ -142,7 +146,7 @@ class TableList extends Component<TableListProps, TableListState> {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'listTableList/fetch',
+      type: 'bookmarksList/fetch',
     });
   }
 
@@ -171,7 +175,7 @@ class TableList extends Component<TableListProps, TableListState> {
     }
 
     dispatch({
-      type: 'listTableList/fetch',
+      type: 'bookmarksList/fetch',
       payload: params,
     });
   };
@@ -183,7 +187,7 @@ class TableList extends Component<TableListProps, TableListState> {
       formValues: {},
     });
     dispatch({
-      type: 'listTableList/fetch',
+      type: 'bookmarksList/fetch',
       payload: {},
     });
   };
@@ -203,7 +207,7 @@ class TableList extends Component<TableListProps, TableListState> {
     switch (e.key) {
       case 'remove':
         dispatch({
-          type: 'listTableList/remove',
+          type: 'bookmarksList/remove',
           payload: {
             id: selectedRows.map(row => row.id),
           },
@@ -212,7 +216,7 @@ class TableList extends Component<TableListProps, TableListState> {
               selectedRows: [],
             });
             dispatch({
-              type: 'listTableList/fetch',
+              type: 'bookmarksList/fetch',
               payload: { }
             });
           },
@@ -239,7 +243,6 @@ class TableList extends Component<TableListProps, TableListState> {
 
       const values = {
         ...fieldsValue
-        // updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
       };
 
       this.setState({
@@ -247,7 +250,7 @@ class TableList extends Component<TableListProps, TableListState> {
       });
 
       dispatch({
-        type: 'listTableList/fetch',
+        type: 'bookmarksList/fetch',
         payload: values,
       });
     });
@@ -262,13 +265,13 @@ class TableList extends Component<TableListProps, TableListState> {
 
   handleAdd = (fields: FormValsType) => {
     const { dispatch } = this.props;
-    const type = fields.id ? 'listTableList/update' : 'listTableList/add';
+    const type = fields.id ? 'bookmarksList/update' : 'bookmarksList/add';
     dispatch({
       type,
       payload: fields,
       callback: () => {
         dispatch({
-          type: 'listTableList/fetch',
+          type: 'bookmarksList/fetch',
           payload: { }
         });
       }
@@ -284,19 +287,13 @@ class TableList extends Component<TableListProps, TableListState> {
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
-            <FormItem label="文章名称">
+            <FormItem label="技能名称">
               {getFieldDecorator('name')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
-            <FormItem label="文章状态">
-              {getFieldDecorator('status')(
-                <Select placeholder="请选择" style={{ width: '100%' }}>
-                  <Option value="">请选择</Option>
-                  <Option value="0">展示</Option>
-                  <Option value="1">不展示</Option>
-                </Select>,
-              )}
+            <FormItem label="技能简介">
+              {getFieldDecorator('subject')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
@@ -316,7 +313,12 @@ class TableList extends Component<TableListProps, TableListState> {
       </Form>
     );
   }
-
+  onChange (value: string[]) {
+    console.log(value)
+  }
+  cascaderFilter (inputValue: string, path: CascaderOption[]): boolean | undefined{
+    return path.some(option => option.id.toLowerCase().indexOf(inputValue.toLowerCase()) > -1);
+  }
   renderAdvancedForm() {
     const {
       form: { getFieldDecorator },
@@ -325,53 +327,27 @@ class TableList extends Component<TableListProps, TableListState> {
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
-            <FormItem label="文章名称">
+            <FormItem label="技能名称">
               {getFieldDecorator('name')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
-            <FormItem label="文章状态">
-              {getFieldDecorator('status')(
-                <Select placeholder="请选择" style={{ width: '100%' }}>
-                  <Option value="">请选择</Option>
-                  <Option value="0">展示</Option>
-                  <Option value="1">不展示</Option>
-                </Select>,
-              )}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem label="文章简介">
+            <FormItem label="技能简介">
               {getFieldDecorator('subject')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
         </Row>
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-          <Col md={8} sm={24}>
-            <FormItem label="更新日期">
-              {getFieldDecorator('updatedAt')(
-                <DatePicker style={{ width: '100%' }} placeholder="请输入更新日期" />,
-              )}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem label="创建日期">
-            {getFieldDecorator('createdAt')(
-                <DatePicker style={{ width: '100%' }} placeholder="请输入创建日期" />,
-              )}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem label="文章标签">
+          <Col md={16} sm={24}>
+            <FormItem label="技能类别">
               {getFieldDecorator('labels')(
-                <Select placeholder="请选择" style={{ width: '100%' }}>
-                  <Option value="">请选择</Option>
-                  {
-                    labels.map((item, index) => {
-                     return <Option value={item} key={index}>{ item }</Option>
-                    })
-                  }
-                </Select>
+                <Cascader
+                  fieldNames={{ label: 'name', value: 'id', children: 'children' }}
+                  options={options}
+                  onChange={this.onChange}
+                  placeholder="请选择"
+                  showSearch={this.cascaderFilter}
+                  changeOnSelect />
               )}
             </FormItem>
           </Col>
@@ -400,7 +376,7 @@ class TableList extends Component<TableListProps, TableListState> {
 
   render() {
     const {
-      listTableList: { data },
+      bookmarksList: { data },
       loading
     } = this.props;
     const { selectedRows, modalVisible, stepFormValues } = this.state;
