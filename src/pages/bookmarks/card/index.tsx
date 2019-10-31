@@ -22,7 +22,10 @@ class Projects extends Component<ProjectsProps> {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'bookmarksCard/fetch'
+      type: 'bookmarksCard/fetch',
+      payload: {
+        pageSize: 1000,
+      }
     });
     dispatch({
       type: 'bookmarksCard/cascader'
