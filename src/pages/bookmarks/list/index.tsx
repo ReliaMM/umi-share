@@ -102,14 +102,14 @@ class TableList extends Component<TableListProps, TableListState> {
       title: '类别',
       dataIndex: 'type',
       render(val: IStatusMapType, record) {
-        return record.bookmark_type.name
+        return record.bookmark_type && record.bookmark_type.name
       },
     },
     {
       title: '标签',
       dataIndex: 'tag',
       render(val: IStatusMapType, record) {
-        return record.bookmark_tag.name
+        return record.bookmark_tag && record.bookmark_tag.name
       },
     },
     {
@@ -384,6 +384,7 @@ class TableList extends Component<TableListProps, TableListState> {
               <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
                 新建
               </Button>
+              <a href="/api/bookmarks/list/exportExcel">导出</a>
               {selectedRows.length > 0 && (
                 <span>
                   <Dropdown overlay={menu}>

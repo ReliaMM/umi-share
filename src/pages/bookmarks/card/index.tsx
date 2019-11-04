@@ -69,8 +69,8 @@ class Projects extends Component<ProjectsProps> {
               <div className={styles.cardItemContent}>
                 <span>{moment(item.updatedAt).fromNow()}</span>
                 <div className={styles.avatarList}>
-                  <Tag color="gold">{item.bookmark_type.name}</Tag>
-                  <Tag color="gold">{item.bookmark_tag.name}</Tag>
+                  <Tag color="gold">{item.bookmark_type && item.bookmark_type.name}</Tag>
+                  <Tag color="gold">{item.bookmark_tag && item.bookmark_tag.name}</Tag>
                 </div>
               </div>
             </Card>
