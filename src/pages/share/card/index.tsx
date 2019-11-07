@@ -25,7 +25,10 @@ class Projects extends Component<ProjectsProps> {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'listSearchProjects/fetch'
+      type: 'listSearchProjects/fetch',
+      payload: {
+        pageSize: 'all'
+      }
     });
   }
 

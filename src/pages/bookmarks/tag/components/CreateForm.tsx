@@ -8,6 +8,7 @@ import { TableListItem } from '../data.d';
 export interface FormValsType extends Partial<TableListItem> {
   id?: number;
   name?: string;
+  bookmark_type?: TypeTableListItem;
   subject?: string;
   labels?: string;
 }
@@ -53,7 +54,7 @@ const CreateForm: React.FC<CreateFormProps> = props => {
       <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="所属类别">
         {form.getFieldDecorator('type', {
           rules: [{ required: true, message: '请选择' }],
-          initialValue: values.type,
+          initialValue: values.bookmark_type && values.bookmark_type.name,
         })(
           <Select style={{ width: '100%' }}>
             {

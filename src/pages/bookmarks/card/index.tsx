@@ -24,7 +24,7 @@ class Projects extends Component<ProjectsProps> {
     dispatch({
       type: 'bookmarksCard/fetch',
       payload: {
-        pageSize: 1000,
+        pageSize: 'all',
       }
     });
     dispatch({
@@ -135,7 +135,8 @@ const WarpForm = Form.create<ProjectsProps>({
     dispatch({
       type: 'bookmarksCard/fetch',
       payload: {
-        ...allValues
+        ...allValues,
+        pageSize: 'all'
       },
     });
   },

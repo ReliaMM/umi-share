@@ -90,7 +90,7 @@ class TableList extends Component<TableListProps, TableListState> {
       dataIndex: 'type',
       render: (text, record) => (
         <span>
-          { record.bookmark_type.name || '' }
+          { record.bookmark_type && record.bookmark_type.name || '' }
         </span>
       ),
     },
@@ -112,7 +112,7 @@ class TableList extends Component<TableListProps, TableListState> {
     dispatch({
       type: 'bookmarksTag/option',
       payload: {
-        pageSize: 1000,
+        pageSize: 'all'
       }
     });
   }

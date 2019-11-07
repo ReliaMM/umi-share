@@ -1,10 +1,10 @@
 import { TableListItem as TypeTableListItem } from '../type/data.d';
 export interface TableListItem {
-  id: number;
-  name: string;
-  subject: string;
-  type: string;
-  bookmark_type: TypeTableListItem;
+  id?: number;
+  name?: string;
+  subject?: string;
+  type?: string;
+  bookmark_type?: TypeTableListItem;
 }
 
 export interface TableListPagination {
