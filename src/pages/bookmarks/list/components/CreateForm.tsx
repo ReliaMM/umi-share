@@ -31,7 +31,7 @@ const CreateForm: React.FC<CreateFormProps> = props => {
       handleAdd(fields);
     });
   };
- const onChange  = (value: string[]) =>{
+  const onChange  = (value: string[]) =>{
     console.log(value)
   }
   const cascaderFilter = (inputValue: string, path: CascaderOption[]): boolean | undefined => {
